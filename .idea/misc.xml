@@ -3,6 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/find_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/find_rv.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/fragment1.xml" value="0.152" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/fragment2.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/fragment3.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/fragment_find.xml" value="0.264" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/item_find_rv.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/layout/nav_header.xml" value="0.22826086956521738" />
+        <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/WinterVacationAssessment/app/src/main/res/xml/network_config.xml" value="0.1" />
         <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1525" />
         <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/app/src/main/res/drawable/round.xml" value="0.1525" />
         <entry key="..\:/AndroidStudio_project/WinterVacationAssessment/app/src/main/res/layout/Activity/activity_main.xml" value="0.22826086956521738" />
