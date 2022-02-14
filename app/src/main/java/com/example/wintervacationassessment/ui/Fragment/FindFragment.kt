@@ -113,6 +113,7 @@ class FindFragment : Fragment() {
         thread=null
     }
 
+    //初始化首页rv的函数
     fun initFindRV(){
         findRVList.add(FindRV(R.drawable.ic_findrv_recommend,"每日推荐"))
         findRVList.add(FindRV(R.drawable.ic_findrv_fm,"私人FM"))
@@ -120,7 +121,7 @@ class FindFragment : Fragment() {
         findRVList.add(FindRV(R.drawable.ic_findrv_list,"排行榜"))
         findRVList.add(FindRV(R.drawable.ic_findrv_live,"直播"))
         findRVList.add(FindRV(R.drawable.ic_findrv_number,"数字专辑"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_sleep,"助眠解压"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_think,"专注冥想"))
         findRVList.add(FindRV(R.drawable.ic_findrv_songhouse,"歌房"))
         findRVList.add(FindRV(R.drawable.ic_findrv_game,"游戏专区"))
     }
