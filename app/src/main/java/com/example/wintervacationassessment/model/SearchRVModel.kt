@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.Model
+package com.example.wintervacationassessment.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -8,14 +8,28 @@ import com.google.gson.annotations.SerializedName
  * Time on 12:10
  * Email: why_wanghy@qq.com
  */
+
+
 data class SongsBean(
-    @SerializedName("songs")
-    val songs:List<SongsData>?=null
+    @SerializedName("result")
+    val songsData: SongsData?=null
 )
 
 data class SongsData(
+    @SerializedName("songs")
+    val songs:List<Song>?=null
+)
+
+data class Song(
     @SerializedName("name")
     val name:String?=null,
     @SerializedName("id")
-    val id:String?=null
+    val id:String?=null,
+    @SerializedName("al")
+    val picUrl:PicUrl?=null
+)
+
+data class PicUrl(
+    @SerializedName("picUrl")
+    val picUrl:String?=null
 )

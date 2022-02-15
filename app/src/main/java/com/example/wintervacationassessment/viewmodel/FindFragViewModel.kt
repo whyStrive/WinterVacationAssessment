@@ -1,8 +1,8 @@
-package com.example.wintervacationassessment.ViewModel
+package com.example.wintervacationassessment.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.wintervacationassessment.Model.BannerBean
-import com.example.wintervacationassessment.Model.RCSongListBean
+import com.example.wintervacationassessment.model.BannerBean
+import com.example.wintervacationassessment.model.RCSongListBean
 import com.example.wintervacationassessment.util.sendRequestWithOkHttp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,7 +18,7 @@ import com.google.gson.reflect.TypeToken
 class FindFragViewModel() : ViewModel() {
     companion object {
         lateinit var VP2List: BannerBean
-        lateinit var RCList:RCSongListBean
+        lateinit var RCList: RCSongListBean
     }
 
     //VP2使用
@@ -33,11 +33,11 @@ class FindFragViewModel() : ViewModel() {
     }
 
     //推荐歌单使用
-    fun RCSongList(callback: (RCSongListBean) -> Unit){
+    fun RCSongList(callback: (RCSongListBean) -> Unit) {
         //获取json
         "http://redrock.udday.cn:2022/personalized?limit=60".sendRequestWithOkHttp {
             //解析
-            val rcSongListBean=rcSongListBeanWithGSON(it)
+            val rcSongListBean = rcSongListBeanWithGSON(it)
             //回调
             callback(rcSongListBean)
         }
@@ -54,8 +54,9 @@ class FindFragViewModel() : ViewModel() {
         //返回数据
         return VP2List
     }
+
     //推荐歌单的gson处理
-    private fun rcSongListBeanWithGSON(jsonData: String):RCSongListBean{
+    private fun rcSongListBeanWithGSON(jsonData: String): RCSongListBean {
         //创建对象
         val gson = Gson()
         //用自带方法取得类型

@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.ui.Adapter
+package com.example.wintervacationassessment.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

@@ -1,11 +1,10 @@
-package com.example.wintervacationassessment.ui.Fragment
+package com.example.wintervacationassessment.ui.fragment
 
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.wintervacationassessment.R
 
 /**

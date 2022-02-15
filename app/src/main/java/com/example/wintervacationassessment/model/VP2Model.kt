@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.Model
+package com.example.wintervacationassessment.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
  * Email: why_wanghy@qq.com
  */
 data class BannerBean(
+    //反射获取信息
     @SerializedName("banners")
     val banner:List<BannerData>?=null
 )

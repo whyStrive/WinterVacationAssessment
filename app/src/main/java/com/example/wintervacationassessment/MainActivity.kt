@@ -3,16 +3,23 @@ package com.example.wintervacationassessment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.EditText
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.wintervacationassessment.ViewModel.FindFragViewModel
+import androidx.recyclerview.widget.RecyclerView
+import com.example.wintervacationassessment.ui.fragment.FindFragment
+import com.example.wintervacationassessment.ui.fragment.SearchFragment
+import com.example.wintervacationassessment.viewmodel.FindFragViewModel
 import com.example.wintervacationassessment.util.showToast
+import androidx.fragment.app.FragmentManager as FragmentManager
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var vm:FindFragViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +36,14 @@ class MainActivity : AppCompatActivity() {
         }
         val navView:com.google.android.material.navigation.NavigationView=findViewById(R.id.navView)
         navView.setCheckedItem(R.id.myMessage)
-        val drawerLayout:DrawerLayout=findViewById(R.id.drawerLayout)
         navView.setNavigationItemSelectedListener {
             "菜单没时间做了呜呜呜（菜鸡泪奔）".showToast()
             true
+        }
+        //当搜索时，首页fragment更换为展示搜索结果的fragment
+        val et:EditText=findViewById(R.id.editText)
+        et.setOnClickListener{
+            replaceFragment(SearchFragment(et))
         }
     }
 
@@ -43,6 +54,16 @@ class MainActivity : AppCompatActivity() {
             android.R.id.home->drawerLayout.openDrawer(GravityCompat.START)
         }
         return true
+    }
+
+    //更换fragment的函数
+    private fun replaceFragment(frag:Fragment){
+        val fragmentManager= supportFragmentManager
+        val transaction=fragmentManager.beginTransaction()
+        transaction.replace(R.id.find_layout,frag)
+        //加入返回栈
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.ui.Adapter
+package com.example.wintervacationassessment.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.wintervacationassessment.Model.RCSongList
+import com.example.wintervacationassessment.model.RCSongList
 import com.example.wintervacationassessment.R
-import com.example.wintervacationassessment.util.MyApplication
 import com.example.wintervacationassessment.util.showToast
 
 /**

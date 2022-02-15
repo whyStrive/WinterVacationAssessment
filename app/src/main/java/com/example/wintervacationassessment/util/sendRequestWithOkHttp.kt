@@ -1,5 +1,6 @@
 package com.example.wintervacationassessment.util
 
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Exception
@@ -20,18 +21,18 @@ fun String.sendRequestWithOkHttp(callback:(String)->Unit):String{
     thread {
         try {
             //创建一个OkHttpClient的实例
-            val client= OkHttpClient()
+            val client = OkHttpClient()
             //创建request对象
-            val request= Request.Builder()
-                    //设置url，由于是String类的扩展函数所以直接传this
+            val request = Request.Builder()
+                //设置url，由于是String类的扩展函数所以直接传this
                 .url(this)
                 .build()
             //创建call对象，并调用方法获取数据
-            val response=client.newCall(request).execute()
+            val response = client.newCall(request).execute()
             //得到返回数据的具体内容
-            responseData= response.body?.string().toString()
+            responseData = response.body?.string().toString()
             callback(responseData)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

@@ -1,27 +1,23 @@
-package com.example.wintervacationassessment.ui.Fragment
+package com.example.wintervacationassessment.ui.fragment
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.wintervacationassessment.Model.FindRV
-import com.example.wintervacationassessment.Model.RCSongList
-import com.example.wintervacationassessment.Model.RCSongListBean
-import com.example.wintervacationassessment.ui.Adapter.FragmentPagerAdapter
+import com.example.wintervacationassessment.model.FindRV
+import com.example.wintervacationassessment.model.RCSongList
+import com.example.wintervacationassessment.model.RCSongListBean
+import com.example.wintervacationassessment.ui.adapter.FragmentPagerAdapter
 import com.example.wintervacationassessment.R
-import com.example.wintervacationassessment.ViewModel.FindFragViewModel
-import com.example.wintervacationassessment.ViewModel.FindFragViewModel.Companion.VP2List
-import com.example.wintervacationassessment.ui.Adapter.FindRVAdapter
-import com.example.wintervacationassessment.ui.Adapter.RCSongListAdapter
+import com.example.wintervacationassessment.viewmodel.FindFragViewModel
+import com.example.wintervacationassessment.viewmodel.FindFragViewModel.Companion.VP2List
+import com.example.wintervacationassessment.ui.adapter.FindRVAdapter
+import com.example.wintervacationassessment.ui.adapter.RCSongListAdapter
 import com.example.wintervacationassessment.util.MyApplication
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -33,7 +29,7 @@ import kotlin.concurrent.thread
  * Time on 20:52
  * Email: why_wanghy@qq.com
  */
-class FindFragment : Fragment() {
+class FindFragment : Fragment(R.layout.fragment_find) {
     val findRVList = ArrayList<FindRV>()
 
     //轮播图使用
@@ -47,13 +43,8 @@ class FindFragment : Fragment() {
     private lateinit var vm: FindFragViewModel
 
     //加载 “发现” 的fragment
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        //加载布局
-        val view = inflater.inflate(R.layout.fragment_find, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+        super.onViewCreated(view, savedInstanceState)
         /*
         以下为轮播图
          */
@@ -150,8 +141,6 @@ class FindFragment : Fragment() {
             refreshRCSongList(rcSongListRV.adapter as RCSongListAdapter)
             swipeRefresh.isRefreshing = false
         }
-        //返回view
-        return view
     }
 
     override fun onDestroy() {
@@ -178,7 +167,8 @@ class FindFragment : Fragment() {
         rcSongList.clear()
         //为防止有重复的内容出现，设置下面的arraylist来存储已经用过的数据（暂时还没想到更好的办法，将就用了）
         val arr = ArrayList<Int>()
-        for (i in 0 until 6) {
+        var i=0
+        while (i<6) {
             val r: Int = (0 until 60).random()
             if (arr.contains(r)) {
                 continue
@@ -190,6 +180,7 @@ class FindFragment : Fragment() {
                         rc.rcSongList.get(r).picUrl.toString()
                     )
                 )
+                i++
             }
         }
         arr.clear()

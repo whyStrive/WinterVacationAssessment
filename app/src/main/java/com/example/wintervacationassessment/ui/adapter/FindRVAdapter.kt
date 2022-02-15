@@ -1,13 +1,12 @@
-package com.example.wintervacationassessment.ui.Adapter
+package com.example.wintervacationassessment.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.wintervacationassessment.Model.FindRV
+import com.example.wintervacationassessment.model.FindRV
 import com.example.wintervacationassessment.R
 import com.example.wintervacationassessment.util.showToast
 

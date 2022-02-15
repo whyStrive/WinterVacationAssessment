@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
  */
 
 
-data class SongCanUseData(
+data class SongCanUseBean(
     @SerializedName("success")
     val result:Boolean=false,
     @SerializedName("message")

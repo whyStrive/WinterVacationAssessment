@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.Model
+package com.example.wintervacationassessment.model
 
 /**
  * Author by why

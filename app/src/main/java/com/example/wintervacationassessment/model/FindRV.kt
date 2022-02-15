@@ -1,4 +1,4 @@
-package com.example.wintervacationassessment.Model
+package com.example.wintervacationassessment.model
 
 /**
  * Author by why
@@ -8,6 +8,4 @@ package com.example.wintervacationassessment.Model
  */
 
 //创建首页横向rv的item类
-class FindRV(val imageId:Int,val text:String) {
-
-}
+data class FindRV(val imageId:Int,val text:String)
