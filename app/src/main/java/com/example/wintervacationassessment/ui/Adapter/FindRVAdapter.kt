@@ -17,7 +17,7 @@ import com.example.wintervacationassessment.util.showToast
  * Time on 21:58
  * Email: why_wanghy@qq.com
  */
-class FindRVAdapter(val findList:List<FindRV>) :
+class FindRVAdapter(val findList:ArrayList<FindRV>) :
     RecyclerView.Adapter<FindRVAdapter.ViewHolder>(){
     inner class ViewHolder(view:View):RecyclerView.ViewHolder(view){
         val findRViv:ImageView=view.findViewById(R.id.findRViv)

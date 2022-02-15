@@ -1,6 +1,9 @@
 package com.example.wintervacationassessment.ui.Fragment
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.wintervacationassessment.Model.FindRV
+import com.example.wintervacationassessment.Model.RCSongList
+import com.example.wintervacationassessment.Model.RCSongListBean
 import com.example.wintervacationassessment.ui.Adapter.FragmentPagerAdapter
 import com.example.wintervacationassessment.R
 import com.example.wintervacationassessment.ViewModel.FindFragViewModel
 import com.example.wintervacationassessment.ViewModel.FindFragViewModel.Companion.VP2List
 import com.example.wintervacationassessment.ui.Adapter.FindRVAdapter
+import com.example.wintervacationassessment.ui.Adapter.RCSongListAdapter
 import com.example.wintervacationassessment.util.MyApplication
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -27,11 +34,16 @@ import kotlin.concurrent.thread
  * Email: why_wanghy@qq.com
  */
 class FindFragment : Fragment() {
-     val findRVList=ArrayList<FindRV>()
-    //轮播图使用
-    private var flag=true
-    private var thread:Thread?=null
+    val findRVList = ArrayList<FindRV>()
 
+    //轮播图使用
+    private var flag = true
+    private var thread: Thread? = null
+
+    //推荐歌单使用
+    val rcSongList = ArrayList<RCSongList>()
+
+    //FindFragment的vm
     private lateinit var vm: FindFragViewModel
 
     //加载 “发现” 的fragment
@@ -40,9 +52,11 @@ class FindFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-    //以下为轮播图
         //加载布局
-        val view =  inflater.inflate(R.layout.fragment_find, container, false)
+        val view = inflater.inflate(R.layout.fragment_find, container, false)
+        /*
+        以下为轮播图
+         */
         //使用ViewModelProvider构造ViewModel
         vm = ViewModelProvider(requireActivity()).get(FindFragViewModel::class.java)
         //获取到vp2的实例
@@ -63,66 +77,141 @@ class FindFragment : Fragment() {
                 //vp2适配器
                 vp2.adapter = FragmentPagerAdapter(requireActivity(), fragments)
                 //获取tabLayout实例
-                val tabLayout:TabLayout=view.findViewById(R.id.tabLayout)
+                val tabLayout: TabLayout = view.findViewById(R.id.tabLayout)
                 //设置tabLayout
-                val tab= vp2.let {
-                    TabLayoutMediator(tabLayout, it,object:TabLayoutMediator.TabConfigurationStrategy{
-                        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-                            //不知道弄什么好，就弄个“·”吧
-                            tab.setText("·")
-                        }
-                    })
+                val tab = vp2.let {
+                    TabLayoutMediator(
+                        tabLayout,
+                        it,
+                        object : TabLayoutMediator.TabConfigurationStrategy {
+                            override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
+                                //不知道弄什么好，就弄个“·”吧
+                                tab.setText("·")
+                            }
+                        })
                 }
                 //attch
                 tab.attach()
             }
         }
         //设置轮播（简易版）
-        thread =  thread {
-            while(flag){
-                for (index in 0..2){
+        thread = thread {
+            while (flag) {
+                for (index in 0 until findRVList.size) {
                     Thread.sleep(3000)
-                    requireActivity().runOnUiThread{
-                        vp2?.setCurrentItem(index,true)
+                    requireActivity().runOnUiThread {
+                        vp2?.setCurrentItem(index, true)
                     }
                 }
             }
         }
 
-    //以下为RV
+        /*
+        以下为RV
+        */
         //初始化rv
         initFindRV()
-        val layoutManager=LinearLayoutManager(MyApplication.context)
+        val layoutManager = LinearLayoutManager(MyApplication.context)
         //设置方向为横向
-        layoutManager.orientation=LinearLayoutManager.HORIZONTAL
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         //获取rv的实例
-        val findRV:RecyclerView=view.findViewById(R.id.find_rv)
+        val findRV: RecyclerView = view.findViewById(R.id.find_rv)
         //设置rv的layoutManager
-        findRV.layoutManager=layoutManager
+        findRV.layoutManager = layoutManager
         //取得adapter
-        val adapter=FindRVAdapter(findRVList)
+        val adapter = FindRVAdapter(findRVList)
         //设置rv的adapter
-        findRV.adapter=adapter
+        findRV.adapter = adapter
+
+        /*
+        以下为推荐歌单
+        */
+        vm.RCSongList {
+            initRCSongList(it)
+        }
+        val rcSongListRV: RecyclerView = view.findViewById(R.id.rv_rcSongList)
+        rcSongListRV.post {
+            val rcLayoutManager = LinearLayoutManager(MyApplication.context)
+            rcLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            rcSongListRV.layoutManager = rcLayoutManager
+            rcSongListRV.adapter = RCSongListAdapter(rcSongList)
+        }
+
+        //在这里实现下拉刷新
+        //下面是swipeRefresh使用的固定写法
+        val swipeRefresh: SwipeRefreshLayout = view.findViewById(R.id.swipeRefresh)
+        swipeRefresh.setColorSchemeResources(R.color.refresh)
+        swipeRefresh.setOnRefreshListener {
+            //刷新vp2
+            refreshVP2(
+                FragmentPagerAdapter(requireActivity(), fragments),
+            )
+            //刷新推荐歌单
+            refreshRCSongList(rcSongListRV.adapter as RCSongListAdapter)
+            swipeRefresh.isRefreshing = false
+        }
         //返回view
         return view
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        flag=false
-        thread=null
+        flag = false
+        thread = null
     }
 
     //初始化首页rv的函数
-    fun initFindRV(){
-        findRVList.add(FindRV(R.drawable.ic_findrv_recommend,"每日推荐"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_fm,"私人FM"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_songlist,"歌单"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_list,"排行榜"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_live,"直播"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_number,"数字专辑"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_think,"专注冥想"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_songhouse,"歌房"))
-        findRVList.add(FindRV(R.drawable.ic_findrv_game,"游戏专区"))
+    fun initFindRV() {
+        findRVList.add(FindRV(R.drawable.ic_findrv_recommend, "每日推荐"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_fm, "私人FM"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_songlist, "歌单"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_list, "排行榜"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_live, "直播"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_number, "数字专辑"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_think, "专注冥想"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_songhouse, "歌房"))
+        findRVList.add(FindRV(R.drawable.ic_findrv_game, "游戏专区"))
+    }
+
+    //初始化推荐歌单的函数
+    fun initRCSongList(rc: RCSongListBean) {
+        rcSongList.clear()
+        //为防止有重复的内容出现，设置下面的arraylist来存储已经用过的数据（暂时还没想到更好的办法，将就用了）
+        val arr = ArrayList<Int>()
+        for (i in 0 until 6) {
+            val r: Int = (0 until 60).random()
+            if (arr.contains(r)) {
+                continue
+            } else {
+                arr.add(r)
+                rcSongList.add(
+                    RCSongList(
+                        rc.rcSongList?.get(r)?.name!!,
+                        rc.rcSongList.get(r).picUrl.toString()
+                    )
+                )
+            }
+        }
+        arr.clear()
+    }
+
+    //刷新vp2的函数
+    @SuppressLint("NotifyDataSetChanged")
+    fun refreshVP2(
+        adapter: FragmentPagerAdapter
+    ) {
+        adapter.notifyDataSetChanged()
+    }
+
+    //刷新推荐歌单的函数
+    @SuppressLint("NotifyDataSetChanged")
+    fun refreshRCSongList(
+        adapter: RCSongListAdapter,
+    ) {
+        //刷新数据
+        vm.RCSongList {
+            initRCSongList(it)
+            requireActivity().runOnUiThread { adapter.notifyDataSetChanged() }
+        }
     }
 }

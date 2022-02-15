@@ -1,45 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintDimensionRatio="1080:420"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-
-        </androidx.viewpager2.widget.ViewPager2>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            app:tabIndicatorColor="#00ff00"
-            app:tabIndicatorGravity="bottom"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="#e10905"
-            app:layout_constraintTop_toBottomOf="@id/view_pager"/>
+            android:layout_height="wrap_content">
+            <!--将vp2包在cardView中，简单实现圆角矩形(方的太难看了）-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintDimensionRatio="1080:420">
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                </androidx.viewpager2.widget.ViewPager2>
+            </androidx.cardview.widget.CardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/find_rv"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintTop_toBottomOf="@id/tabLayout"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:tabIndicatorColor="#00ff00"
+                app:tabIndicatorGravity="bottom"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="#e10905"
+                app:layout_constraintTop_toBottomOf="@id/cardView"/>
+
+
+            <!--”每日推荐“等的recyclerview-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/find_rv"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"/>
+            <!--画线-->
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:background="#bdbdbd"
+                app:layout_constraintTop_toBottomOf="@id/find_rv"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:id="@+id/tv_rc_SongList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="推荐歌单"
+                android:textSize="20sp"
+                android:paddingStart="15dp"
+                android:textColor="#17191a"
+                app:layout_constraintTop_toBottomOf="@id/view_line"
+                android:gravity="start"
+                android:layout_marginTop="15dp" />
+            <!--推荐歌单的rv-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_rc_SongList"
+                android:id="@+id/rv_rcSongList" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

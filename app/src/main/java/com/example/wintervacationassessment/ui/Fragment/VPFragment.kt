@@ -22,6 +22,11 @@ class VPFragment(private val url:String):Fragment(R.layout.vp_fragment) {
         //获取ImageView实例
         val iv: ImageView= view.findViewById(R.id.vp_im)
         //加载图片
-        Glide.with(iv).load(url).into(iv)
+        Glide
+            .with(iv)
+            .load(url)
+            //未加载出来时，使用app图标占位
+            .placeholder(R.drawable.ic_app)
+            .into(iv)
     }
 }
