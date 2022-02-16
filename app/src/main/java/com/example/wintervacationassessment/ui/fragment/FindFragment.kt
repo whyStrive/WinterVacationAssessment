@@ -2,21 +2,22 @@ package com.example.wintervacationassessment.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import com.example.wintervacationassessment.model.FindRV
-import com.example.wintervacationassessment.model.RCSongList
-import com.example.wintervacationassessment.model.RCSongListBean
 import com.example.wintervacationassessment.ui.adapter.FragmentPagerAdapter
 import com.example.wintervacationassessment.R
+import com.example.wintervacationassessment.model.*
 import com.example.wintervacationassessment.viewmodel.FindFragViewModel
 import com.example.wintervacationassessment.viewmodel.FindFragViewModel.Companion.VP2List
 import com.example.wintervacationassessment.ui.adapter.FindRVAdapter
+import com.example.wintervacationassessment.ui.adapter.GoodSongLIstAdapter
 import com.example.wintervacationassessment.ui.adapter.RCSongListAdapter
 import com.example.wintervacationassessment.util.MyApplication
 import com.google.android.material.tabs.TabLayout
@@ -30,14 +31,17 @@ import kotlin.concurrent.thread
  * Email: why_wanghy@qq.com
  */
 class FindFragment : Fragment(R.layout.fragment_find) {
-    val findRVList = ArrayList<FindRV>()
+    private val findRVList = ArrayList<FindRV>()
 
     //轮播图使用
     private var flag = true
     private var thread: Thread? = null
 
     //推荐歌单使用
-    val rcSongList = ArrayList<RCSongList>()
+    private val rcSongList = ArrayList<RCSongList>()
+
+    //精品歌单使用
+    private val goodSongList=ArrayList<GoodSongList>()
 
     //FindFragment的vm
     private lateinit var vm: FindFragViewModel
@@ -128,6 +132,21 @@ class FindFragment : Fragment(R.layout.fragment_find) {
             rcSongListRV.adapter = RCSongListAdapter(rcSongList)
         }
 
+        /*
+        以下为精品歌单
+        */
+
+        vm.goodSongList {
+            initGoodSongList(it)
+        }
+        val goodSongListRV: RecyclerView = view.findViewById(R.id.rv_goodSongList)
+        goodSongListRV.post {
+            val gdLayoutManager = LinearLayoutManager(MyApplication.context)
+            gdLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            goodSongListRV.layoutManager = gdLayoutManager
+            goodSongListRV.adapter = GoodSongLIstAdapter(goodSongList)
+        }
+
         //在这里实现下拉刷新
         //下面是swipeRefresh使用的固定写法
         val swipeRefresh: SwipeRefreshLayout = view.findViewById(R.id.swipeRefresh)
@@ -139,7 +158,9 @@ class FindFragment : Fragment(R.layout.fragment_find) {
             )
             //刷新推荐歌单
             refreshRCSongList(rcSongListRV.adapter as RCSongListAdapter)
-            swipeRefresh.isRefreshing = false
+            //刷新精品歌单
+            refreshGoodSongList(goodSongListRV.adapter as GoodSongLIstAdapter)
+            swipeRefresh.isRefreshing=false
         }
     }
 
@@ -185,6 +206,29 @@ class FindFragment : Fragment(R.layout.fragment_find) {
         }
         arr.clear()
     }
+    //初始化精品歌单的函数
+    fun initGoodSongList(gd:GoodSongListBean) {
+        goodSongList.clear()
+        //为防止有重复的内容出现，设置下面的arraylist来存储已经用过的数据（暂时还没想到更好的办法，将就用了）
+        val arr = ArrayList<Int>()
+        var i=0
+        while (i<6) {
+            val r: Int = (0 until 60).random()
+            if (arr.contains(r)) {
+                continue
+            } else {
+                arr.add(r)
+                goodSongList.add(
+                    GoodSongList(
+                        gd.goodSongList?.get(r)?.goodSongListName!!,
+                        gd.goodSongList.get(r).goodSongListUrl.toString()
+                    )
+                )
+                i++
+            }
+        }
+        arr.clear()
+    }
 
     //刷新vp2的函数
     @SuppressLint("NotifyDataSetChanged")
@@ -202,6 +246,18 @@ class FindFragment : Fragment(R.layout.fragment_find) {
         //刷新数据
         vm.RCSongList {
             initRCSongList(it)
+            requireActivity().runOnUiThread { adapter.notifyDataSetChanged() }
+        }
+    }
+
+    //刷新精品歌单的函数
+    @SuppressLint("NotifyDataSetChanged")
+    fun refreshGoodSongList(
+        adapter: GoodSongLIstAdapter,
+    ) {
+        //刷新数据
+        vm.goodSongList {
+            initGoodSongList(it)
             requireActivity().runOnUiThread { adapter.notifyDataSetChanged() }
         }
     }

@@ -1,18 +1,19 @@
 package com.example.wintervacationassessment.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.wintervacationassessment.MainActivity
 import com.example.wintervacationassessment.R
 import com.example.wintervacationassessment.model.SearchRV
 import com.example.wintervacationassessment.model.SongsBean
 import com.example.wintervacationassessment.ui.adapter.SearchRVAdapter
 import com.example.wintervacationassessment.viewmodel.SearchFragViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * Author by why
@@ -20,28 +21,22 @@ import com.example.wintervacationassessment.viewmodel.SearchFragViewModel
  * Time on 11:48
  * Email: why_wanghy@qq.com
  */
-class SearchFragment(et: EditText) : Fragment(R.layout.search_fragment) {
+class SearchFragment(private val editText: EditText) : Fragment(R.layout.fragment_search) {
     //SearchFragment的vm
     private lateinit var vm: SearchFragViewModel
-    private val edit: EditText = et
-
     //rv的数组
-    val songList = ArrayList<SearchRV>()
+    private val songList = ArrayList<SearchRV>()
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e("TAG", "onViewCreated: ")
         //使用ViewModelProvider构造ViewModel
         vm = ViewModelProvider(requireActivity()).get(SearchFragViewModel::class.java)
-        //获取editText的实例,以便于获取关键字
-        Log.e("TAG", edit.text.toString())
-        vm.searchSongs(edit.text.toString()) {
+        vm.searchSongs(editText.text.toString()) {
             initSearchRV(it)
             val rv: RecyclerView = view.findViewById(R.id.rv_search)
-            val adapter = SearchRVAdapter(songList)
-            songList.forEach {
-                println(it)
-            }
+            val adapter = SearchRVAdapter(songList, this)
             rv.post {
                 rv.adapter = adapter
                 rv.layoutManager = LinearLayoutManager(requireContext())

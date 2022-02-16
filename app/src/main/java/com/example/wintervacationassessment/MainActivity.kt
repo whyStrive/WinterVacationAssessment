@@ -4,21 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.example.wintervacationassessment.ui.fragment.FindFragment
+import com.example.wintervacationassessment.ui.adapter.SearchRVAdapter
+import com.example.wintervacationassessment.ui.adapter.SearchRVAdapter.Companion.mediaPlayer
 import com.example.wintervacationassessment.ui.fragment.SearchFragment
 import com.example.wintervacationassessment.viewmodel.FindFragViewModel
 import com.example.wintervacationassessment.util.showToast
-import androidx.fragment.app.FragmentManager as FragmentManager
 
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var vm:FindFragViewModel
+    private lateinit var vm: FindFragViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,44 +27,78 @@ class MainActivity : AppCompatActivity() {
         vm = ViewModelProvider(this).get(FindFragViewModel::class.java)
 
         //将toolbar的HOME按钮设置为滑动菜单的导航按钮
-        val toolbar:androidx.appcompat.widget.Toolbar=findViewById(R.id.toolbar)
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeAsUpIndicator(R.drawable.ic_menu)
         }
-        val navView:com.google.android.material.navigation.NavigationView=findViewById(R.id.navView)
+        val navView: com.google.android.material.navigation.NavigationView =
+            findViewById(R.id.navView)
         navView.setCheckedItem(R.id.myMessage)
         navView.setNavigationItemSelectedListener {
             "菜单没时间做了呜呜呜（菜鸡泪奔）".showToast()
             true
         }
         //当搜索时，首页fragment更换为展示搜索结果的fragment
-        val et:EditText=findViewById(R.id.editText)
-        et.setOnClickListener{
+        val et: EditText = findViewById(R.id.editText)
+        et.setOnClickListener {
             replaceFragment(SearchFragment(et))
+        }
+        //播放按钮
+        val play: ImageButton = findViewById(R.id.play)
+        play.setOnClickListener {
+            if (SearchRVAdapter.isInit) {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.pause()
+                    play.setImageResource(R.drawable.ic_play)
+                } else {
+                    mediaPlayer.start()
+                    play.setImageResource(R.drawable.ic_pause)
+                }
+            }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //按下HOME，打开左侧的滑动菜单
-        val drawerLayout:DrawerLayout=findViewById(R.id.drawerLayout)
-        when(item.itemId){
-            android.R.id.home->drawerLayout.openDrawer(GravityCompat.START)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        when (item.itemId) {
+            android.R.id.home -> drawerLayout.openDrawer(GravityCompat.START)
         }
         return true
     }
 
     //更换fragment的函数
-    private fun replaceFragment(frag:Fragment){
-        val fragmentManager= supportFragmentManager
-        val transaction=fragmentManager.beginTransaction()
-        transaction.replace(R.id.find_layout,frag)
+    fun replaceFragment(frag: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.find_layout, frag)
         //加入返回栈
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

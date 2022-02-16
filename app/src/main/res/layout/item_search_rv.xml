@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="60dp"
     android:orientation="vertical">
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -19,7 +19,8 @@
             android:layout_height="match_parent"
             android:layout_weight="14"
             android:text="网络异常！请检查后重试"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:layout_marginStart="15dp"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <View
         android:layout_width="match_parent"

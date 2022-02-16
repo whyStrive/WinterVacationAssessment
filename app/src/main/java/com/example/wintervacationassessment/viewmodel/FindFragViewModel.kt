@@ -1,8 +1,13 @@
 package com.example.wintervacationassessment.viewmodel
 
+import android.annotation.SuppressLint
+import android.widget.EditText
 import androidx.lifecycle.ViewModel
+import com.example.wintervacationassessment.R
 import com.example.wintervacationassessment.model.BannerBean
+import com.example.wintervacationassessment.model.GoodSongListBean
 import com.example.wintervacationassessment.model.RCSongListBean
+import com.example.wintervacationassessment.ui.fragment.FindFragment
 import com.example.wintervacationassessment.util.sendRequestWithOkHttp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,6 +24,7 @@ class FindFragViewModel() : ViewModel() {
     companion object {
         lateinit var VP2List: BannerBean
         lateinit var RCList: RCSongListBean
+        lateinit var goodSongList:GoodSongListBean
     }
 
     //VP2使用
@@ -65,6 +71,28 @@ class FindFragViewModel() : ViewModel() {
         RCList = gson.fromJson(jsonData, typeOf)
         //返回数据
         return RCList
+    }
+
+    //精品歌单使用
+    fun goodSongList(callback: (GoodSongListBean) -> Unit) {
+        //获取json
+        "http://redrock.udday.cn:2022/top/playlist/highquality?limit=60".sendRequestWithOkHttp {
+            //解析
+            val goodSongListBean = goodSongListBeanWithGSON(it)
+            //回调
+            callback(goodSongListBean)
+        }
+    }
+    //精品歌单的gson处理
+    private fun goodSongListBeanWithGSON(jsonData: String): GoodSongListBean {
+        //创建对象
+        val gson = Gson()
+        //用自带方法取得类型
+        val typeOf = object : TypeToken<GoodSongListBean>() {}.type
+        //解析
+        goodSongList = gson.fromJson(jsonData, typeOf)
+        //返回数据
+        return goodSongList
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.wintervacationassessment.viewmodel
 
 import android.util.Log
+import android.widget.EditText
 import androidx.lifecycle.ViewModel
 import com.example.wintervacationassessment.model.MusicUrlBean
 import com.example.wintervacationassessment.model.SongCanUseBean
@@ -18,13 +19,12 @@ import com.google.gson.reflect.TypeToken
 class SearchFragViewModel:ViewModel() {
     companion object{
         lateinit var songs:SongsBean
-        lateinit var canUse:SongCanUseBean
+        //lateinit var canUse:SongCanUseBean
         lateinit var musicUrl:MusicUrlBean
     }
 
     //搜索使用的网络请求
     fun searchSongs(keyWord:String?,callback: (SongsBean) -> Unit) {
-        Log.e("TAG", "http://redrock.udday.cn:2022/cloudsearch?keywords=$keyWord" )
         //获取json
         "http://redrock.udday.cn:2022/cloudsearch?keywords=$keyWord".sendRequestWithOkHttp {
             //解析
@@ -47,7 +47,7 @@ class SearchFragViewModel:ViewModel() {
     }
 
     //判断歌曲是否可用
-    fun searchSongsCanUse(id:String?,callback: (SongCanUseBean) -> Unit) {
+    /*fun searchSongsCanUse(id:String?,callback: (SongCanUseBean) -> Unit) {
         //获取json
         "http://redrock.udday.cn:2022/check/music?id=$id".sendRequestWithOkHttp {
             //解析
@@ -55,9 +55,9 @@ class SearchFragViewModel:ViewModel() {
             //回调
             callback(canUse)
         }
-    }
+    }*/
     //判断是否可用的解析
-    fun  searchSongCanUseWithGSON(jsonData: String):SongCanUseBean{
+    /*fun  searchSongCanUseWithGSON(jsonData: String):SongCanUseBean{
         //创建对象
         val gson = Gson()
         //用自带方法取得类型
@@ -66,11 +66,12 @@ class SearchFragViewModel:ViewModel() {
         canUse = gson.fromJson(jsonData, typeOf)
         //返回数据
         return canUse
-    }
+    }*/
 
     //获取音乐url
     fun getMusicUrl(id: String?,callback: (MusicUrlBean) -> Unit) {
         //获取json
+        //http://redrock.udday.cn:2022/song/url?id=1422264194
         "http://redrock.udday.cn:2022/song/url?id=$id".sendRequestWithOkHttp {
             //解析
             val musicUrlBean = getMusicUrlWithGSON(it)

@@ -78,6 +78,26 @@
                 android:layout_marginTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_rc_SongList"
                 android:id="@+id/rv_rcSongList" />
+            <TextView
+                android:id="@+id/tv_good_SongList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="精品歌单"
+                android:textSize="20sp"
+                android:paddingStart="15dp"
+                android:textColor="#17191a"
+                app:layout_constraintTop_toBottomOf="@id/rv_rcSongList"
+                android:gravity="start"
+                android:layout_marginTop="15dp" />
+            <!--精品歌单的rv-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_good_SongList"
+                android:id="@+id/rv_goodSongList" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
