@@ -1,10 +1,12 @@
 package com.example.wintervacationassessment
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         //当搜索时，首页fragment更换为展示搜索结果的fragment
         val et: EditText = findViewById(R.id.editText)
         et.setOnClickListener {
-            replaceFragment(SearchFragment(et))
+            replaceFragment(SearchFragment(et), true)
         }
         //播放按钮
         val play: ImageButton = findViewById(R.id.play)
@@ -70,12 +72,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     //更换fragment的函数
-    fun replaceFragment(frag: Fragment) {
+    fun replaceFragment(frag: Fragment, add: Boolean) {
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.find_layout, frag)
-        //加入返回栈
-        transaction.addToBackStack(null)
+        if (frag is SearchFragment) {
+            //移除栈顶部的fragment
+            supportFragmentManager.popBackStack()
+        }
+        if (add) {
+            //加入返回栈
+            transaction.addToBackStack(null)
+        }
         transaction.commit()
     }
 
@@ -85,14 +93,6 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer.release()
     }
 }
-
-
-
-
-
-
-
-
 
 
 

@@ -19,7 +19,7 @@ fun String.sendRequestWithOkHttp(callback:(String)->Unit):String{
     //lateinit出了点问题，还是初始化一下吧。。。
     var responseData =""
     thread {
-        try {
+        //try {
             //创建一个OkHttpClient的实例
             val client = OkHttpClient()
             //创建request对象
@@ -32,9 +32,9 @@ fun String.sendRequestWithOkHttp(callback:(String)->Unit):String{
             //得到返回数据的具体内容
             responseData = response.body?.string().toString()
             callback(responseData)
-        } catch (e: Exception) {
+        /*} catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
     }
     //返回得到的数据
     return  responseData

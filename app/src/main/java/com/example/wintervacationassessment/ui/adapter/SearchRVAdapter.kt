@@ -90,14 +90,16 @@ class SearchRVAdapter(
                 }
             }
             //获取editText的实例
-            val et:EditText=frag.requireActivity().findViewById(R.id.editText)
+            val et: EditText = frag.requireActivity().findViewById(R.id.editText)
             //获取歌曲图片的实例
-            val iv:ImageView=frag.requireActivity().findViewById(R.id.songPic)
-            vm.searchSongs(et.text.toString()){
-                Glide.with(frag.requireActivity())
-                    .load(it.songsData?.songs!![position].picUrl.toString())
-                    .placeholder(R.drawable.ic_app)
-                    .into(iv)
+            val iv: ImageView = frag.requireActivity().findViewById(R.id.songPic)
+            vm.searchSongs(et.text.toString()) {
+                iv.post {
+                    Glide.with(iv)
+                        .load(it.songsData?.songs!![position].picUrl?.picUrl.toString())
+                        .placeholder(R.drawable.ic_app)
+                        .into(iv)
+                }
             }
         }
     }
